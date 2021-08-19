@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Index from './components/index'
-import 'bootstrap/dist/css/bootstrap.css';
+import Index from './components/index';
 import { BrowserRouter } from 'react-router-dom';
 
 
