@@ -1,18 +1,16 @@
 {
-  "name": "server",
+  "name": "datafetcher",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "angeldata.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.1",
-    "express": "^4.17.1",
+    "mongodb": "^4.1.0",
     "mongoose": "^5.13.7",
-    "nodemon": "^2.0.12",
     "smartapi-javascript": "^1.0.14"
   }
 }
