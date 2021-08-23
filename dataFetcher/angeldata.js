@@ -4,7 +4,7 @@ let  WebSocket  = require("./websocket");
 const mongoose = require("mongoose");
 
 mongoose
-  .connect("mongodb://localhost/index", {
+  .connect("mongodb+srv://admin:admin@index.yscf1.mongodb.net/index?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
