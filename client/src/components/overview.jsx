@@ -3,8 +3,8 @@ import axios from "axios";
 export default class Overview extends Component {
     state = {
         indMarkets: [
-            { index: "Nifty", iv: 0 },
-            { index: "Nifty Bank", iv: 0 },
+            { index: "Nifty", ltp: 0, cng: 0,nc:0 },
+            { index: "Nifty Bank", ltp: 0, cng: 0,nc:0 },
         ],
         usMarkets: [
             "Dow Jones",
@@ -30,7 +30,7 @@ export default class Overview extends Component {
         scrp.script = "text/javascript";
         this.div.appendChild(scrp);
         this.updateTick();
-        setInterval(this.updateTick, 3000);
+        setInterval(this.updateTick, 2000);
     }
     updateTick() {
         axios.get("http://localhost:3001/indices").then((data) => {
@@ -39,8 +39,8 @@ export default class Overview extends Component {
             const bnf = parsed.filter((d) => d.index_name === "bank nifty");
             this.setState({
                 indMarkets: [
-                    { index: "Nifty", iv: nf[0].iv },
-                    { index: "Nifty Bank", iv: bnf[0].iv },
+                    { index: "Nifty", ltp: nf[0].ltp, cng: nf[0].cng, nc: nf[0].nc },
+                    { index: "Nifty Bank", ltp: bnf[0].ltp, cng: bnf[0].cng, nc: bnf[0].nc },
                 ]
             });
         });
@@ -118,7 +118,9 @@ export default class Overview extends Component {
                                 <div className="col">
                                     {item.index}
                                     <br />
-                                    <span className={`fw-bold ${item.cng<0?"text-danger":"text-success"}`} >{item.iv}</span>
+                                    <span className={`fw-bold ${item.cng<0?"text-danger":"text-success"}`} >{item.ltp}</span>
+                                    <br />
+                                    <span className={`${item.cng<0?"text-danger":"text-success"}`} style={{fontSize:'12px'}}>{item.cng} ({parseFloat(item.nc).toFixed(2)}%)</span>
                                 </div>
                             );
                         })}
