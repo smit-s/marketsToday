@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
     "mongodb": "^4.1.0",
     "mongoose": "^5.13.7",
     "smartapi-javascript": "^1.0.14"

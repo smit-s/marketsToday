@@ -33,7 +33,7 @@ export default class Overview extends Component {
         setInterval(this.updateTick, 2000);
     }
     updateTick() {
-        axios.get("http://localhost:3001/indices").then((data) => {
+        axios.get("https://marketstoday.herokuapp.com/indices").then((data) => {
             const parsed = data.data;
             const nf = parsed.filter((d) => d.index_name === "nifty");
             const bnf = parsed.filter((d) => d.index_name === "bank nifty");
