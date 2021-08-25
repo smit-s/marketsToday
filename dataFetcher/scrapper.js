@@ -2,6 +2,7 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const mongoose = require("mongoose");
 
+
 mongoose.connect("mongodb+srv://admin:admin@index.yscf1.mongodb.net/index?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -90,4 +91,4 @@ Promise.all(promises).then(()=>{
 
 setInterval(() => {
     main()
-}, 5000);
+}, 4000);

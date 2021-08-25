@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 export default class Overview extends Component {
-  schema={ltp: 0, cng: 0, nc: 0};
+  schema = { ltp: 0, cng: 0, nc: 0 };
   state = {
     indMarkets: [
       { index: "Nifty", ...this.schema },
@@ -16,7 +16,7 @@ export default class Overview extends Component {
     asianMarkets: [
       { index: "SGX Nifty Futures", ...this.schema },
       { index: "Hang Seng", ...this.schema },
-      { index: "Nikkei",...this.schema},
+      { index: "Nikkei", ...this.schema },
       { index: "SSEC", ...this.schema },
     ],
     euMarkets: [
@@ -39,6 +39,22 @@ export default class Overview extends Component {
     this.div.appendChild(scrp);
     this.updateTick();
     setInterval(this.updateTick, 2500);
+    const sc2 = document.createElement("script");
+    sc2.type = "text/javascript";
+    sc2.innerText = "var infolinks_pid = 3341910; var infolinks_wsid = 0;";
+    document.body.appendChild(sc2);
+    const sc1 = document.createElement("script");
+    sc1.type = "text/javascript";
+    sc1.src = "//resources.infolinks.com/js/infolinks_main.js";
+    document.body.appendChild(sc1);
+        
+const sc3 = document.createElement("script");
+sc3.src = "//pl16541438.highperformancecpm.com/241bff7935109559cc7e1f44f383460f/invoke.js";
+sc3.async = 'true';
+document.body.appendChild(sc3);
+const div = document.createElement("div");
+div.id = "container-241bff7935109559cc7e1f44f383460f";
+document.body.appendChild(div);
   }
   updateTick() {
     axios.get("https://marketstoday.herokuapp.com/indices").then((data) => {
@@ -61,9 +77,9 @@ export default class Overview extends Component {
           { index: "Nifty Bank", ...bnf },
         ],
         usMarkets: [
-          { index: "Dow Jones", ...dx },
+          { index: "Dow Jones", ...dj },
           { index: "NASDAQ", ...nas },
-          { index: "Dow Futures", ...dj },
+          { index: "Dow Futures", ...djf },
           { index: "US Dollar Index", ...dli },
         ],
         asianMarkets: [
@@ -74,7 +90,7 @@ export default class Overview extends Component {
         ],
         euMarkets: [
           { index: "FTSE", ...ft },
-          { index: "DAX", ...djf },
+          { index: "DAX", ...dx },
         ],
       });
     });

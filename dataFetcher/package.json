@@ -4,7 +4,8 @@
   "description": "",
   "main": "angeldata.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node master.js"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,7 @@
     "cheerio": "^1.0.0-rc.10",
     "mongodb": "^4.1.0",
     "mongoose": "^5.13.7",
-    "smartapi-javascript": "^1.0.14"
+    "smartapi-javascript": "^1.0.14",
+    "worker-farm": "^1.7.0"
   }
 }
