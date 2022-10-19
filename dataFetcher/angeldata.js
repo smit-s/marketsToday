@@ -7,6 +7,7 @@ mongoose
   .connect("mongodb+srv://admin:admin@index.yscf1.mongodb.net/index?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("connected");
@@ -27,18 +28,18 @@ const nfty = mongoose.model("nifty", indexSchema, "nifty");
 const bnknfty = mongoose.model("bank_nifty", indexSchema, "bank_nifty");
 async function getSocket() {
   var data = JSON.stringify({
-    clientcode: "S859046",
-    password: "Smit@1998",
+    clientcode: "",
+    password: "",
   });
   let smart_api = new SmartAPI({
-    api_key: "cMUf87gC", // PROVIDE YOUR API KEY HERE
+    api_key: "", // PROVIDE YOUR API KEY HERE
   });
 
-  const session = await smart_api.generateSession("S859046", "Smit@1998");
+  const session = await smart_api.generateSession("", "");
   const feed_token = session["data"]["feedToken"];
   const jwt = session["data"]["jwtToken"];
   const socket = new WebSocket({
-    client_code: "S859046",
+    client_code: "",
     feed_token: feed_token,
   });
   await socket.connect();
@@ -51,7 +52,7 @@ async function receiveTick(data) {
       await updateTick(data, '26009', bnknfty);
     }
   } catch {
-    console.log("error");
+    //console.log("error");
   }
   console.log("receiveTick:::::", data);
 }
@@ -62,7 +63,7 @@ socket.then((socket) => {
   socket.runScript("nse_cm|26000&nse_cm|26009", "mw");
   socket.on("tick", receiveTick);
   socket.on("close", runFeed);
-});
+}).catch((err)=>{console.log(err)});
 }
 
 async function updateTick(data, tokenId, mdl) {

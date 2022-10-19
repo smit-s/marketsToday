@@ -1,10 +1,14 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const axios=require('axios');
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   next();
 });
+trigger()();
+setInterval(trigger(), 1750000);
+
 mongoose
   .connect(
     "mongodb+srv://admin:admin@index.yscf1.mongodb.net/index?retryWrites=true&w=majority",
@@ -17,7 +21,7 @@ mongoose
     console.log("connected");
   })
   .catch(() => {
-    return new Error("Coonection failed: ");
+    return new Error("Connection failed: ");
   });
 
 const nfty = mongoose.model(
@@ -28,42 +32,13 @@ const bnknfty = mongoose.model(
   "bank_nifty",
   new mongoose.Schema({}, { collection: "bank_nifty" })
 );
-const dax = mongoose.model(
-  "dax",
-  new mongoose.Schema({}, { collection: "dax" })
+const wm = mongoose.model(
+  "wm",
+  new mongoose.Schema({}, { collection: "wm" })
 );
-const ftse = mongoose.model(
-  "ftse",
-  new mongoose.Schema({}, { collection: "ftse" })
-);
-const ssec = mongoose.model(
-  "ssec",
-  new mongoose.Schema({}, { collection: "ssec" })
-);
-const nikkei = mongoose.model(
-  "nikkei",
-  new mongoose.Schema({}, { collection: "nikkei" })
-);
-const heng = mongoose.model(
-  "heng",
-  new mongoose.Schema({}, { collection: "heng" })
-);
-const sgx = mongoose.model(
-  "sgx",
-  new mongoose.Schema({}, { collection: "sgx" })
-);
-const dji = mongoose.model(
-  "dji",
-  new mongoose.Schema({}, { collection: "dji" })
-);
-const nasdaq = mongoose.model(
-  "nasdaq",
-  new mongoose.Schema({}, { collection: "nasdaq" })
-);
-const di = mongoose.model("di", new mongoose.Schema({}, { collection: "di" }));
-const djif = mongoose.model(
-  "djif",
-  new mongoose.Schema({}, { collection: "djif" })
+const analysisModel = mongoose.model(
+  "stockList",
+  new mongoose.Schema({}, { collection: "stockList" })
 );
 app.get("/", (req, res) => {
   res.send("Markets Today");
@@ -75,10 +50,37 @@ app.get("/indices", (req, res) => {
   });
 });
 
+app.get("/analysis", (req, res) => {
+  const ans  = getstockList();
+  ans.then((data) => {
+    res.send(JSON.stringify(data));
+  });
+});
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`listening ${port}`);
 });
+function trigger() {
+  return () => {
+    axios.get('https://fetcherz.herokuapp.com/').then((res) => {
+      console.log(res.data);
+    });
+  };
+}
+
+async function getstockList() {
+  try {
+    const lst = await analysisModel.find();
+    let stockListObj = JSON.stringify(lst);
+    stockListObj = JSON.parse(stockListObj);
+    let stockNameList=stockListObj.map((res)=>res['name'])
+    return stockNameList;
+  }catch (err) {
+    console.log(err);
+  }
+}
+
 async function getIndexData() {
   try {
     const nf = await nfty.find();
@@ -90,50 +92,13 @@ async function getIndexData() {
     nftyObj["index_name"] = "nifty";
     bnknftyObj["index_name"] = "bank nifty";
 
-    const dx = await dax.find();
-    const ft = await ftse.find();
-    const dj = await dji.find();
-    const djf = await djif.find();
-    const sg = await sgx.find();
-    const se = await ssec.find();
-    const ni = await nikkei.find();
-    const hen = await heng.find();
-    const nas = await nasdaq.find();
-    const dli = await di.find();
-    let dxobj = JSON.stringify(dx[0]);
-    let ftobj = JSON.stringify(ft[0]);
-    dxobj = JSON.parse(dxobj);
-    ftobj = JSON.parse(ftobj);
-    let djobj = JSON.stringify(dj[0]);
-    let djfobj = JSON.stringify(djf[0]);
-    djobj = JSON.parse(djobj);
-    djfobj = JSON.parse(djfobj);
-    let sgobj = JSON.stringify(sg[0]);
-    let seobj = JSON.stringify(se[0]);
-    sgobj = JSON.parse(sgobj);
-    seobj = JSON.parse(seobj);
-    let niobj = JSON.stringify(ni[0]);
-    let henobj = JSON.stringify(hen[0]);
-    niobj = JSON.parse(niobj);
-    henobj = JSON.parse(henobj);
-    let nasobj = JSON.stringify(nas[0]);
-    let dliobj = JSON.stringify(dli[0]);
-    nasobj = JSON.parse(nasobj);
-    dliobj = JSON.parse(dliobj);
-
+    const wldmkts = await wm.find();
+    let wmobj = JSON.stringify(wldmkts[0]);   
+    wmobj = JSON.parse(wmobj);
     return [
       nftyObj,
       bnknftyObj,
-      dxobj,
-      ftobj,
-      djobj,
-      djfobj,
-      sgobj,
-      seobj,
-      niobj,
-      henobj,
-      nasobj,
-      dliobj,
+      ...wmobj['lst']
     ];
   } catch (err) {
     console.log(err);

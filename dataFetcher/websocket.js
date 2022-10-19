@@ -1,7 +1,7 @@
 let web_socket = require("ws");
 let atob = require('atob');
 let pako = require('pako');
-
+//Websocket for angle broking taken from samrt-api package.
 let triggers = {
      "connect": [],
      "tick": [],
